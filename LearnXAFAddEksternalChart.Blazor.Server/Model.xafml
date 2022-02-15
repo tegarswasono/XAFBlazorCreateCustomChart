@@ -1,3 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Application>
+  <NavigationItems>
+    <Items>
+      <Item Id="Default">
+        <Items>
+          <Item Id="ChartExample" ViewId="ChartExampleDetailView" ObjectKey="" Caption="Chart Example" IsNewNode="True" />
+        </Items>
+      </Item>
+    </Items>
+  </NavigationItems>
+  <SchemaModules>
+    <SchemaModule Name="CloneObjectModule" Version="21.2.4.0" IsNewNode="True" />
+    <SchemaModule Name="SystemModule" Version="21.2.4.0" IsNewNode="True" />
+  </SchemaModules>
+  <Views>
+    <DashboardView Id="ChartExampleDetailView" Caption="Chart Example" IsNewNode="True">
+      <Items IsNewNode="True">
+        <SalesInvoiceButtonDetailViewItemBlazor Id="chart1" IsNewNode="True" />
+        <StaticText Id="title" Caption="Title" Text="Example Chart Title" IsNewNode="True" />
+      </Items>
+      <Layout IsNewNode="True">
+        <LayoutGroup Id="Main" ShowCaption="False" Direction="Vertical" Index="0" RelativeSize="100" Caption="Title" IsNewNode="True">
+          <LayoutItem Id="title" ViewItem="title" Index="0" RelativeSize="3.0637254901960786" IsNewNode="True" />
+          <LayoutItem Id="chart1" ViewItem="chart1" Index="1" RelativeSize="96.93627450980392" IsNewNode="True" />
+        </LayoutGroup>
+      </Layout>
+    </DashboardView>
+  </Views>
 </Application>

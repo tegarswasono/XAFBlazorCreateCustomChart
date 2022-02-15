@@ -1,0 +1,34 @@
+﻿@using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Components.Web
+@using DevExpress.Blazor
+@inject IJSRuntime JSRuntime;
+@*<DxButton Text="Invoice" Click="Button_Click" />*@
+<div id="chart" style="width:500px; height: 300px;"></div>
+
+@code {
+    //async void Button_Click(MouseEventArgs e)
+    //{
+    //    await JSRuntime.InvokeVoidAsync("window.open", "SalesInvoice_ListView", "_self");
+    //}
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        try
+        {
+
+            if (firstRender)
+            {
+                await JSRuntime.InvokeVoidAsync("triggerChart0");
+                //await JS.InvokeVoidAsync("triggerChart1");
+                //await JS.InvokeVoidAsync("triggerChart2");
+                StateHasChanged();
+            }
+        }
+        catch (JSException ex)
+        {
+            throw ex;
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+    public static RenderFragment Create() =>@<SalesInvoiceButtonRenderer />;
+}

@@ -20,7 +20,8 @@
         string userAgent = Request.Headers["User-Agent"];
         bool isIE = userAgent.Contains("MSIE") || userAgent.Contains("Trident");
     }
-    @if(isIE) {
+    @if (isIE)
+    {
         <link href="css/site.css" rel="stylesheet" />
         <div class="d-flex flex-column justify-content-center align-items-center h-100">
             <div class="d-flex">
@@ -32,7 +33,8 @@
             </div>
         </div>
     }
-    else {
+    else
+    {
         <component type="typeof(SplashScreen)" render-mode="Static" param-Caption='"LearnXAFAddEksternalChart"' param-ImagePath='"images/SplashScreen.svg"' />
 
         <link href="_content/DevExpress.Blazor/dx-blazor.css" rel="stylesheet" />
@@ -43,7 +45,7 @@
         <app class="d-none">
             <component type="typeof(App)" render-mode="Server" />
         </app>
-        
+
         <component type="typeof(AlertsHandler)" render-mode="Server" />
 
         <div id="blazor-error-ui">
@@ -51,6 +53,40 @@
         </div>
 
         <script src="_framework/blazor.server.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        <script>
+            function triggerChart0() {
+                console.log('0');
+                var options =
+                {
+                    chart: {
+                        type: 'bar'
+                    },
+                    series: [{
+                        name: 'Defects %',
+                        data: [17.0, 15.9, 12.5, 8.6, 8.4]
+                    }],
+                    xaxis: {
+                        categories: ['Missing Line', 'Stains', 'Hole', 'Stop Mark', 'Snangging']
+                    },
+                    title: {
+                        text: 'TOP DEFECTS % (12 Oct 2021)',
+                        align: 'left',
+                        margin: 10,
+                        offsetX: 0,
+                        offsetY: 0,
+                        floating: false,
+                        style: {
+                            fontSize: '14px',
+                            fontWeight: 'bold',
+                            color: '#263238'
+                        },
+                    }
+                }
+                var chart = new ApexCharts(document.querySelector("#chart"), options);
+                chart.render();
+            }
+        </script>
     }
 </body>
 </html>
