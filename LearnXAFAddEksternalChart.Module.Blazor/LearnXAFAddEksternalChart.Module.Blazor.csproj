@@ -26,4 +26,9 @@
     <PackageReference Include="DevExpress.Persistent.Base" Version="21.2.4" />
     <PackageReference Include="DevExpress.Persistent.BaseImpl.Xpo" Version="21.2.4" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LearnXAFAddEksternalChart.Module\LearnXAFAddEksternalChart.Module.csproj">
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
