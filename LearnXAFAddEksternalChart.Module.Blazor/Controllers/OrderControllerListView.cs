@@ -51,7 +51,7 @@ namespace LearnXAFAddEksternalChart.Module.Blazor.Controllers
         {
             Dashboard data = ((Dashboard)e.PopupWindowViewCurrentObject);
             var navigationManager = ((BlazorApplication)Application).ServiceProvider.GetRequiredService<NavigationManager>();
-            navigationManager.NavigateTo("/ChartExampleDetailView", forceLoad: true);
+            navigationManager.NavigateTo("/TopOrderDetailView", forceLoad: true);
         }
         protected override void OnActivated()
         {
