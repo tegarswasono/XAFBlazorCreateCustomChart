@@ -2,6 +2,8 @@
 @using Microsoft.AspNetCore.Components.Web
 @using DevExpress.Blazor
 @inject IJSRuntime JSRuntime;
+@using DevExpress.Xpo;
+@using LearnXAFAddEksternalChart.Module.BusinessObjects;
 
 <DxFormLayout CssClass="w-100">
     <DxFormLayoutGroup Caption="Filter" ColSpanMd="12">
@@ -15,7 +17,7 @@
             <DxButton RenderStyle="ButtonRenderStyle.Secondary"
                       Text="Filter Chart"
                       title="Filter Chart."
-                      CssClass="mr-1"/>
+                      CssClass="mr-1" Click="Button_Click" />
         </DxFormLayoutItem>
     </DxFormLayoutGroup>
     <DxFormLayoutGroup ColSpanMd="12" Caption="Chart">
@@ -23,17 +25,19 @@
     </DxFormLayoutGroup>
 </DxFormLayout>
 
-@code {
+@code 
+{
     DateTime StartDate { get; set; } = DateTime.Now.Date;
     DateTime EndDate { get; set; } = DateTime.Now.Date;
-}
 
-
-@code {
+    [Parameter]
+    public Session session { get; set; }
 
     async void Button_Click(MouseEventArgs e)
     {
-        await JSRuntime.InvokeVoidAsync("window.open", "SalesInvoice_ListView", "_self");
+        Order order = session.FindObject<Order>(null);
+
+        int a = 5;
     }
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
@@ -43,8 +47,6 @@
             if (firstRender)
             {
                 await JSRuntime.InvokeVoidAsync("triggerChart0");
-                //await JS.InvokeVoidAsync("triggerChart1");
-                //await JS.InvokeVoidAsync("triggerChart2");
                 StateHasChanged();
             }
         }
@@ -55,5 +57,5 @@
 
         await base.OnAfterRenderAsync(firstRender);
     }
-    public static RenderFragment Create() =>@<SalesInvoiceButtonRenderer />;
+    public static RenderFragment Create(Session session) =>@<SalesInvoiceButtonRenderer session=@session />;
 }

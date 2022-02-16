@@ -1,6 +1,10 @@
-﻿using DevExpress.ExpressApp.Blazor;
+﻿using DevExpress.ExpressApp;
+using DevExpress.ExpressApp.Blazor;
 using DevExpress.ExpressApp.Editors;
 using DevExpress.ExpressApp.Model;
+using DevExpress.ExpressApp.Xpo;
+using DevExpress.Xpo;
+using LearnXAFAddEksternalChart.Module.BusinessObjects;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -13,17 +17,24 @@ namespace LearnXAFAddEksternalChart.Module.Blazor
     public interface IModelSalesInvoiceButtonDetailViewItemBlazor : IModelViewItem { }
 
     [ViewItem(typeof(IModelSalesInvoiceButtonDetailViewItemBlazor))]
-    public class SalesInvoiceButtonDetailViewItemBlazor : ViewItem
+    public class SalesInvoiceButtonDetailViewItemBlazor : ViewItem, IComplexViewItem
     {
+        private Session sessionBase;
         public class DxButtonHolder : IComponentContentHolder
         {
-            RenderFragment IComponentContentHolder.ComponentContent => SalesInvoiceButtonRenderer.Create();
+            private Session _session;
+            public DxButtonHolder(Session session)
+            {
+                _session = session;
+            }
+            RenderFragment IComponentContentHolder.ComponentContent => SalesInvoiceButtonRenderer.Create(_session);
         }
+        
         public SalesInvoiceButtonDetailViewItemBlazor(IModelViewItem model, Type objectType) : base(objectType, model.Id) { }
-        protected override object CreateControlCore() => new DxButtonHolder();
-        public void test()
+        protected override object CreateControlCore() => new DxButtonHolder(sessionBase);
+        void IComplexViewItem.Setup(IObjectSpace objectSpace, XafApplication application)
         {
-            var tmp = CurrentObject;
+            this.sessionBase = ((XPObjectSpace)objectSpace).Session;
         }
     }
 }
