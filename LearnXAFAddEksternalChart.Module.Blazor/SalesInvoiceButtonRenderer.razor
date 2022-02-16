@@ -2,14 +2,39 @@
 @using Microsoft.AspNetCore.Components.Web
 @using DevExpress.Blazor
 @inject IJSRuntime JSRuntime;
-@*<DxButton Text="Invoice" Click="Button_Click" />*@
-<div id="chart" style="width:500px; height: 300px;"></div>
+
+<DxFormLayout CssClass="w-100">
+    <DxFormLayoutGroup Caption="Filter" ColSpanMd="12">
+        <DxFormLayoutItem Caption="Start Date:" ColSpanMd="12">
+            <DxDateEdit @bind-Date="@StartDate" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem Caption="End Date:" ColSpanMd="12">
+            <DxDateEdit @bind-Date="@EndDate" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem Caption="" ColSpanMd="12">
+            <DxButton RenderStyle="ButtonRenderStyle.Secondary"
+                      Text="Filter Chart"
+                      title="Filter Chart."
+                      CssClass="mr-1"/>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    <DxFormLayoutGroup ColSpanMd="12" Caption="Chart">
+        <div id="chart" style="width:500px; height: 300px;"></div>
+    </DxFormLayoutGroup>
+</DxFormLayout>
 
 @code {
-    //async void Button_Click(MouseEventArgs e)
-    //{
-    //    await JSRuntime.InvokeVoidAsync("window.open", "SalesInvoice_ListView", "_self");
-    //}
+    DateTime StartDate { get; set; } = DateTime.Now.Date;
+    DateTime EndDate { get; set; } = DateTime.Now.Date;
+}
+
+
+@code {
+
+    async void Button_Click(MouseEventArgs e)
+    {
+        await JSRuntime.InvokeVoidAsync("window.open", "SalesInvoice_ListView", "_self");
+    }
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         try

@@ -21,5 +21,9 @@ namespace LearnXAFAddEksternalChart.Module.Blazor
         }
         public SalesInvoiceButtonDetailViewItemBlazor(IModelViewItem model, Type objectType) : base(objectType, model.Id) { }
         protected override object CreateControlCore() => new DxButtonHolder();
+        public void test()
+        {
+            var tmp = CurrentObject;
+        }
     }
 }

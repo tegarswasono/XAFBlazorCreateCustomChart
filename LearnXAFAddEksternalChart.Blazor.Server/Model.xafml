@@ -14,6 +14,30 @@
     <SchemaModule Name="SystemModule" Version="21.2.4.0" IsNewNode="True" />
   </SchemaModules>
   <Views>
+    <DetailView Id="TopOrder_DetailView" AllowDelete="False" AllowEdit="False" AllowNew="False">
+      <Items>
+        <SalesInvoiceButtonDetailViewItemBlazor Id="Chart" IsNewNode="True" />
+      </Items>
+      <Layout>
+        <LayoutGroup Id="Main" RelativeSize="100">
+          <LayoutGroup Id="SimpleEditors" RelativeSize="100">
+            <LayoutGroup Id="TopOrder" RelativeSize="100" Caption="TopOrder" Direction="Vertical">
+              <LayoutGroup Id="Auto6dcf5ff3-eb16-4af3-8807-a7a7b973d6b7" ShowCaption="False" Caption="Auto6dcf5ff3-eb16-4af3-8807-a7a7b973d6b7(4)" Direction="Vertical" Index="0" RelativeSize="100" IsNewNode="True">
+                <LayoutGroup Id="Item1" ShowCaption="True" CaptionLocation="Top" Index="0" RelativeSize="10.957446808510639" Caption="Filter" IsNewNode="True">
+                  <LayoutItem Id="StartDate" ViewItem="StartDate" Index="0" RelativeSize="50" IsNewNode="True" />
+                  <LayoutItem Id="EndDate" ViewItem="EndDate" Index="1" RelativeSize="50" IsNewNode="True" />
+                </LayoutGroup>
+                <LayoutGroup Id="Item2" ShowCaption="True" CaptionLocation="Top" Index="1" RelativeSize="89.04255319148936" Caption="Chart" IsNewNode="True">
+                  <LayoutItem Id="Chart" ViewItem="Chart" Index="0" RelativeSize="100" IsNewNode="True" />
+                </LayoutGroup>
+              </LayoutGroup>
+              <LayoutItem Id="StartDate" ViewItem="StartDate" Index="0" RelativeSize="49.917898193760266" Removed="True" />
+              <LayoutItem Id="EndDate" ViewItem="EndDate" Index="1" RelativeSize="2.9447852760736195" Removed="True" />
+            </LayoutGroup>
+          </LayoutGroup>
+        </LayoutGroup>
+      </Layout>
+    </DetailView>
     <DashboardView Id="TopOrderDetailView" Caption="Top Order" IsNewNode="True">
       <Items IsNewNode="True">
         <SalesInvoiceButtonDetailViewItemBlazor Id="chart1" IsNewNode="True" />

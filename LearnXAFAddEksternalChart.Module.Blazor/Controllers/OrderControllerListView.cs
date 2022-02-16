@@ -50,8 +50,12 @@ namespace LearnXAFAddEksternalChart.Module.Blazor.Controllers
         private void Action_Execute(object sender, PopupWindowShowActionExecuteEventArgs e)
         {
             Dashboard data = ((Dashboard)e.PopupWindowViewCurrentObject);
-            var navigationManager = ((BlazorApplication)Application).ServiceProvider.GetRequiredService<NavigationManager>();
-            navigationManager.NavigateTo("/TopOrderDetailView", forceLoad: true);
+            //var navigationManager = ((BlazorApplication)Application).ServiceProvider.GetRequiredService<NavigationManager>();
+            //navigationManager.NavigateTo("/TopOrderDetailView", forceLoad: true);
+
+            IObjectSpace objectSpace = Application.CreateObjectSpace(typeof(TopOrder));
+            //e.ShowViewParameters.CreatedView = Application.CreateListView(objectSpace, typeof(TopOrder), true);
+            e.ShowViewParameters.CreatedView = Application.CreateDetailView(objectSpace, new TopOrder());
         }
         protected override void OnActivated()
         {
