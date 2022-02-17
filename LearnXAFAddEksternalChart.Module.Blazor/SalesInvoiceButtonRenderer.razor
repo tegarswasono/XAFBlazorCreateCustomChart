@@ -21,7 +21,41 @@
         </DxFormLayoutItem>
     </DxFormLayoutGroup>
     <DxFormLayoutGroup ColSpanMd="12" Caption="Chart">
-        <div id="chart" style="width:500px; height: 300px;"></div>
+        <DxChart T="TopOrderChartModel"
+                 Data="@topOrderChartModels"
+                 Width="100%">
+            <DxChartTitle Text="Population: Age Structure">
+                <DxChartSubTitle Text="Data Estimate for 2020" />
+            </DxChartTitle>
+            <DxChartBarSeries Name="Total Order"
+                              T="TopOrderChartModel"
+                              TArgument="string"
+                              TValue="int"
+                              ArgumentField="pasi => pasi.Name"
+                              ValueField="pasi => pasi.Total"
+                              SummaryMethod="Enumerable.Sum"
+                              Filter='pasi => pasi.Type == TopOrderChartModelTypeEnum.TotalOrder' />
+            <DxChartBarSeries Name="Total Pay"
+                              T="TopOrderChartModel"
+                              TArgument="string"
+                              TValue="int"
+                              ArgumentField="pasi => pasi.Name"
+                              ValueField="pasi => pasi.Total"
+                              SummaryMethod="Enumerable.Sum"
+                              Filter='pasi => pasi.Type == TopOrderChartModelTypeEnum.TotalPay' />
+            <DxChartLegend Position="RelativePosition.Outside"
+                           HorizontalAlignment="HorizontalAlignment.Center"
+                           VerticalAlignment="VerticalEdge.Bottom" />
+            <DxChartTooltip Enabled="true"
+                            Position="RelativePosition.Outside">
+                <div style="margin: 0.75rem">
+                    <div class="font-weight-bold">@context.Point.Argument</div>
+                    <div>Type: @context.Point.SeriesName</div>
+                    <div>Total: @($"{context.Point.Value:N0}")</div>
+                </div>
+            </DxChartTooltip>
+        </DxChart>
+        @*<div id="chart" style="width:500px; height: 300px;"></div>*@
     </DxFormLayoutGroup>
 </DxFormLayout>
 
@@ -29,6 +63,8 @@
 {
     DateTime StartDate { get; set; } = DateTime.Now.Date;
     DateTime EndDate { get; set; } = DateTime.Now.Date;
+    List<TopOrderChartModel> topOrderChartModels { set; get; } = new List<TopOrderChartModel>();
+
 
     [Parameter]
     public Session session { get; set; }
@@ -39,23 +75,23 @@
 
         int a = 5;
     }
-    protected async override Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnInitializedAsync()
     {
-        try
-        {
-
-            if (firstRender)
-            {
-                await JSRuntime.InvokeVoidAsync("triggerChart0");
-                StateHasChanged();
-            }
-        }
-        catch (JSException ex)
-        {
-            throw ex;
-        }
-
-        await base.OnAfterRenderAsync(firstRender);
+        topOrderChartModels.Add(new TopOrderChartModel() { Name = "Baju Anak", Type = TopOrderChartModelTypeEnum.TotalOrder, Total = 4 });
+        topOrderChartModels.Add(new TopOrderChartModel() { Name = "Baju Pria", Type = TopOrderChartModelTypeEnum.TotalOrder, Total = 7 });
+        topOrderChartModels.Add(new TopOrderChartModel() { Name = "Baju Anak", Type = TopOrderChartModelTypeEnum.TotalPay, Total = 3 });
+        topOrderChartModels.Add(new TopOrderChartModel() { Name = "Baju Pria", Type = TopOrderChartModelTypeEnum.TotalPay, Total = 9 });
     }
     public static RenderFragment Create(Session session) =>@<SalesInvoiceButtonRenderer session=@session />;
+
+    public class TopOrderChartModel
+    {
+        public string Name { set; get; }
+        public TopOrderChartModelTypeEnum Type { set; get; }
+        public int Total { set; get; }
+    }
+    public enum TopOrderChartModelTypeEnum
+        {
+            TotalOrder, TotalPay
+        }
 }
