@@ -17,7 +17,7 @@
             <DxButton RenderStyle="ButtonRenderStyle.Secondary"
                       Text="Filter Chart"
                       title="Filter Chart."
-                      CssClass="mr-1" Click="Button_Click" />
+                      CssClass="mr-1" Click="RefreshChart" />
         </DxFormLayoutItem>
     </DxFormLayoutGroup>
     <DxFormLayoutGroup ColSpanMd="12" Caption="Chart">
@@ -30,28 +30,24 @@
             <DxChartBarSeries Name="Total Order"
                               T="TopOrderChartModel"
                               TArgument="string"
-                              TValue="int"
+                              TValue="double"
                               ArgumentField="pasi => pasi.Name"
-                              ValueField="pasi => pasi.Total"
                               SummaryMethod="Enumerable.Sum"
-                              Filter='pasi => pasi.Type == TopOrderChartModelTypeEnum.TotalOrder' />
-            <DxChartBarSeries Name="Total Pay"
+                              ValueField="pasi => pasi.TotalOrder" />
+            @*<DxChartBarSeries Name="Total Pay"
                               T="TopOrderChartModel"
                               TArgument="string"
-                              TValue="int"
+                              TValue="double"
                               ArgumentField="pasi => pasi.Name"
-                              ValueField="pasi => pasi.Total"
                               SummaryMethod="Enumerable.Sum"
-                              Filter='pasi => pasi.Type == TopOrderChartModelTypeEnum.TotalPay' />
+                              ValueField="pasi => pasi.TotalPay" />*@
             <DxChartLegend Position="RelativePosition.Outside"
                            HorizontalAlignment="HorizontalAlignment.Center"
                            VerticalAlignment="VerticalEdge.Bottom" />
             <DxChartTooltip Enabled="true"
                             Position="RelativePosition.Outside">
                 <div style="margin: 0.75rem">
-                    <div class="font-weight-bold">@context.Point.Argument</div>
-                    <div>Type: @context.Point.SeriesName</div>
-                    <div>Total: @($"{context.Point.Value:N0}")</div>
+                    <div>Total: @context.Point.Value</div>
                 </div>
             </DxChartTooltip>
         </DxChart>
@@ -61,37 +57,34 @@
 
 @code 
 {
-    DateTime StartDate { get; set; } = DateTime.Now.Date;
+    DateTime StartDate { get; set; } = DateTime.Now.Date.AddDays(-30);
     DateTime EndDate { get; set; } = DateTime.Now.Date;
     List<TopOrderChartModel> topOrderChartModels { set; get; } = new List<TopOrderChartModel>();
-
-
     [Parameter]
     public Session session { get; set; }
 
-    async void Button_Click(MouseEventArgs e)
-    {
-        Order order = session.FindObject<Order>(null);
-
-        int a = 5;
-    }
     protected override async Task OnInitializedAsync()
     {
-        topOrderChartModels.Add(new TopOrderChartModel() { Name = "Baju Anak", Type = TopOrderChartModelTypeEnum.TotalOrder, Total = 4 });
-        topOrderChartModels.Add(new TopOrderChartModel() { Name = "Baju Pria", Type = TopOrderChartModelTypeEnum.TotalOrder, Total = 7 });
-        topOrderChartModels.Add(new TopOrderChartModel() { Name = "Baju Anak", Type = TopOrderChartModelTypeEnum.TotalPay, Total = 3 });
-        topOrderChartModels.Add(new TopOrderChartModel() { Name = "Baju Pria", Type = TopOrderChartModelTypeEnum.TotalPay, Total = 9 });
+        RefreshChart();
     }
+
+    void RefreshChart()
+    {
+        var items = (from a in session.QueryInTransaction<Order>()
+                     where a.BuyAt >= StartDate && a.BuyAt < EndDate.AddDays(1)
+                     group a by a.ProductName
+                      into b
+                     select new TopOrderChartModel { Name = b.Key.ToString(), TotalOrder = b.Count(), TotalPay = b.Sum(x => x.Price) }
+                      ).OrderByDescending(x => x.TotalOrder).ThenByDescending(x => x.TotalPay).Take(5).ToList();
+        topOrderChartModels = items;
+    }
+
     public static RenderFragment Create(Session session) =>@<SalesInvoiceButtonRenderer session=@session />;
 
-    public class TopOrderChartModel
+    class TopOrderChartModel
     {
         public string Name { set; get; }
-        public TopOrderChartModelTypeEnum Type { set; get; }
-        public int Total { set; get; }
+        public double TotalOrder { set; get; }
+        public double TotalPay { set; get; }
     }
-    public enum TopOrderChartModelTypeEnum
-        {
-            TotalOrder, TotalPay
-        }
 }
