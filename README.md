@@ -15,3 +15,4 @@
 <img src="https://github.com/tegarswasono/XAFBlazorCreateCustomChart/blob/master/Screenshot/Screenshot_2.png" alt="Girl in a jacket" width="500" height="600">
 </li>
 </ol>
+<i>Dia bukan pakai Property Editor, controller dan business class tapi bener2 custom view sendiri. cara nya buat class lalu extend ke ViewItem dan hasil nya nanti add ke dashboard view</i>
